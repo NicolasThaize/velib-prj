@@ -7,7 +7,7 @@ def maxElecVelibs(df): # Grouped by station code, number of electrical velibs av
   return df.select(['stationcode', 'name', 'ebike'])
 
 def nbSlotsVelibs(df): # Grouped by station code, number of emtpy velib slots available
-  return NotImplemented
+  return df.select(['stationcode', 'name', 'numdocksavailable'])
 
 def parseKafkaData(df, schema): # Return a parsed json string kafka df
   return df.select(from_json(col('value'), schema).alias('jsonData')).select('jsonData.*')

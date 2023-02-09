@@ -18,7 +18,11 @@ df = df.selectExpr("CAST(value AS STRING)") # Casting binary values to string
 df = parseKafkaData(df, velib_fields_scheme) # Parse string values to a structured df 
 
 maxMechVelibs = maxMechaVelibs(df)
+maxEVelibs = maxElecVelibs(df)
+nbFreeSlots = nbSlotsVelibs(df)
 
 maxMechVelibs.writeStream.format('console').outputMode('append').start()
+maxEVelibs.writeStream.format('console').outputMode('append').start()
+nbFreeSlots.writeStream.format('console').outputMode('append').start()
 
 spark.streams.awaitAnyTermination()
