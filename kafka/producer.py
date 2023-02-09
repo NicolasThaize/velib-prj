@@ -29,14 +29,13 @@ def store_to_kafka():
         
             if station_code in last_timestamp: # If key already exist
                 if date1_greater_date2(parser.parse(station_last_refresh), parser.parse(last_timestamp[station_code])): # If date from API is greater than kafka's last stored one
-                    print(station_code, " UPDATED")
-                    producer.send('test1', station_data)
+                    print(station_data['fields'], " UPDATED")
+                    producer.send('test1', station_data['fields'])
                     last_timestamp[station_code] = station_last_refresh
             else: # If key does not exist
-                print(station_code, " CREATED")
-                producer.send('test1', station_data)
+                print(station_data['fields'], " CREATED")
+                producer.send('test1', station_data['fields'])
                 last_timestamp[station_code] = station_last_refresh
-        print(last_timestamp)
         sleep(60)
 
 
