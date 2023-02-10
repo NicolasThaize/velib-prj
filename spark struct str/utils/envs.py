@@ -1,4 +1,4 @@
-from pyspark.sql.types import StructType,StructField,IntegerType, FloatType, ArrayType, StringType, DateType
+from pyspark.sql.types import StructType,StructField,IntegerType, FloatType, ArrayType, StringType, TimestampType
 
 velib_fields_scheme = StructType([ \
   StructField('name', StringType(), False), \
@@ -12,7 +12,8 @@ velib_fields_scheme = StructType([ \
   StructField('is_renting', StringType(), False), \
   StructField('is_installed', StringType(), False), \
   StructField('nom_arrondissement_communes', StringType(), False), \
-  StructField('is_returning', StringType(), False) \
+  StructField('is_returning', StringType(), False), \
+  StructField('timestamp', TimestampType(), False)  
 ])
 
 velib_scheme = StructType([ \

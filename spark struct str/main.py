@@ -7,18 +7,18 @@ spark = SparkSession.builder.appName('velib-prj') \
   .getOrCreate() # Spark session w/ kafka dependencies
 spark.sparkContext.setLogLevel("WARN") # Less logs
 
-df = spark \
+raw_df = spark \
   .readStream \
   .format("kafka") \
   .option("kafka.bootstrap.servers", "localhost:9092") \
   .option("subscribe", "test1") \
   .load() # Subscribing to kafka topic
 
-df = df.selectExpr("CAST(value AS STRING)") # Casting binary values to string
-df = parseKafkaData(df, velib_fields_scheme) # Parse string values to a structured df 
+string_casted_df = raw_df.selectExpr("CAST(value AS STRING)") # Casting binary values to string
+structured_df = parseKafkaData(string_casted_df, velib_fields_scheme) # Parse string values to a structured df 
 
-queryBaiscAvg = basicAverage(df)
+queryBaiscAvg = basicAverage(structured_df)
 
-queryBaiscAvg.writeStream.format('console').outputMode('update').start()
+queryBaiscAvg.writeStream.format('console').option('truncate', 'false').outputMode('update').start()
 
 spark.streams.awaitAnyTermination()
