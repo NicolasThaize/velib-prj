@@ -1,6 +1,6 @@
 from pyspark.sql import SparkSession
 from utils.envs import velib_fields_scheme
-from utils.functions import parseKafkaData, maxElecVelibs, maxMechaVelibs, nbSlotsVelibs
+from utils.functions import parseKafkaData, maxElecVelibs, maxMechaVelibs, nbSlotsVelibs, basicAverage
 
 spark = SparkSession.builder.appName('velib-prj') \
   .config('spark.jars.packages', 'org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.1') \
@@ -17,12 +17,8 @@ df = spark \
 df = df.selectExpr("CAST(value AS STRING)") # Casting binary values to string
 df = parseKafkaData(df, velib_fields_scheme) # Parse string values to a structured df 
 
-maxMechVelibs = maxMechaVelibs(df)
-maxEVelibs = maxElecVelibs(df)
-nbFreeSlots = nbSlotsVelibs(df)
+queryBaiscAvg = basicAverage(df)
 
-maxMechVelibs.writeStream.format('console').outputMode('append').start()
-maxEVelibs.writeStream.format('console').outputMode('append').start()
-nbFreeSlots.writeStream.format('console').outputMode('append').start()
+queryBaiscAvg.writeStream.format('console').outputMode('update').start()
 
 spark.streams.awaitAnyTermination()

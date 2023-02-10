@@ -1,4 +1,9 @@
-from pyspark.sql.functions import col, from_json
+from pyspark.sql.functions import col, from_json, avg
+
+
+def basicAverage(df):
+  return df.groupby('stationcode') \
+  .agg(avg('mechanical').alias('avg_mechanical'), avg('ebike').alias('avg_ebike'),  avg('numdocksavailable').alias('avg_numdocksavailable'))
 
 def maxMechaVelibs(df): # Grouped by station code, number of mechanical velibs available
   return df.select(['stationcode', 'name', 'mechanical'])
