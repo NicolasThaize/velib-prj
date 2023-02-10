@@ -17,8 +17,8 @@ raw_df = spark \
 string_casted_df = raw_df.selectExpr("CAST(value AS STRING)") # Casting binary values to string
 structured_df = parseKafkaData(string_casted_df, velib_fields_scheme) # Parse string values to a structured df 
 
-queryBaiscAvg = basicAverage(structured_df)
+queryBasicAvg = basicAverage(structured_df)
 
-queryBaiscAvg.writeStream.format('console').option('truncate', 'false').outputMode('update').start()
+queryBasicAvg.writeStream.format('console').option('truncate', 'false').outputMode('update').start() # Sink result in console
 
 spark.streams.awaitAnyTermination()
