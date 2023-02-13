@@ -1,7 +1,7 @@
 from kafka import KafkaProducer
 import requests
 from time import sleep
-from json import dumps
+from json import dumps, load
 
 from utils.envs import KAFKA_TIMESTAMP_FORMAT
 from utils.functions import date1_greater_date2, convert_due_date_to_timestamp, parse_string_date
@@ -9,15 +9,20 @@ from utils.functions import date1_greater_date2, convert_due_date_to_timestamp, 
 producer = KafkaProducer(bootstrap_servers='localhost:9092', value_serializer=lambda x: dumps(x).encode('utf-8'))
 
 LAST_TIMESTAMP = {}
+IS_OFFLINE=False
 
 def get_velib_data(nrows=10, single_station=False): # HTTP GET on api endpoint according to number of rows requested
     url = "https://opendata.paris.fr/api/records/1.0/search/?dataset=velib-disponibilite-en-temps-reel&q=&lang=fr&rows=" + str(nrows) + "&sort=duedate" if not single_station else "https://opendata.paris.fr/api/records/1.0/search/?dataset=velib-disponibilite-en-temps-reel&q=&lang=fr&rows=9999&sort=duedate&facet=stationcode&refine.stationcode=25005"
     r = requests.get(url)
     return r.json() # return the json content of the response
 
-def store_to_kafka(): # main
+def get_velib_data_offline():
+    with open('/Users/nicolas/Documents/Cours/M1/Big data/Projet velib/velib-prj/kafka/raw_data.json') as json_string:
+        return load(json_string)
+
+def store_to_kafka(offline=False): # main
     while True:
-        velibs_data = get_velib_data(nrows=9999) # Get velib's raw data
+        velibs_data = get_velib_data_offline() if offline else get_velib_data(nrows=9999) # Get velib's raw data
         print("No of velibs stations: ", len(velibs_data['records']))
         for station_data in velibs_data['records']: # For each velib station
             station_data['fields']['duedate'] = convert_due_date_to_timestamp(station_data['fields']['duedate']) # Formatting date format to allow spark timestamp usage
@@ -38,4 +43,4 @@ def store_to_kafka(): # main
         sleep(60) # Refresh data every minutes
 
 
-store_to_kafka()
+store_to_kafka(offline=IS_OFFLINE)
