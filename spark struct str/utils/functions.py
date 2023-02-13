@@ -5,6 +5,10 @@ def basicAverage(df): # Every hour, produce a day windowed df with average elec 
   return df.groupby(window(col('timestamp'), "1 days", "1 hours"), col('stationcode')) \
   .agg(avg('mechanical').alias('avg_mechanical'), avg('ebike').alias('avg_ebike'),  avg('numdocksavailable').alias('avg_numdocksavailable'))
 
+def groupedAverage(df):
+  return df.groupby(window(col('timestamp'), "1 days", "1 hours"), col('cluster_label')) \
+  .agg(avg('mechanical').alias('avg_mechanical'), avg('ebike').alias('avg_ebike'),  avg('numdocksavailable').alias('avg_numdocksavailable'))
+
 def maxMechaVelibs(df): # Grouped by station code, number of mechanical velibs available
   return df.select(['stationcode', 'name', 'mechanical'])
 

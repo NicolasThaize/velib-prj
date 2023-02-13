@@ -1,5 +1,10 @@
 from pyspark.sql.types import StructType,StructField,IntegerType, FloatType, ArrayType, StringType, TimestampType
 
+station_cluster_scheme = StructType([ \
+  StructField('id_station', StringType(), False), \
+  StructField('cluster_label', IntegerType(), False)
+])
+
 velib_fields_scheme = StructType([ \
   StructField('name', StringType(), False), \
   StructField('stationcode', StringType(), False), \
