@@ -6,7 +6,22 @@ School project about Paris Velib's data.
 - Install Java JDK 11
 - Download [Kafka & Zookeeper](https://kafka.apache.org/downloads)
 
-## Procedure
+Or
+- Download docker
+
+## Procedure docker
+1. Start kafka and zookeeper./:
+> `docker-compose up -d`
+
+2. Start Spark Structured Streaming app: 
+> `cd 'spark struct str'/`
+> `python main.py`
+
+3. Start kafka app:
+> `cd kafka/`
+> `python producer.py`
+
+## Procedure standalone
 1. In two separate terminals, launch Zookeeper :
 > `kafka_2.13-3.0.0/bin/zookeeper-server-start.sh kafka_2.13-3.0.0/config/zookeeper.properties`
 
@@ -22,11 +37,14 @@ School project about Paris Velib's data.
 
 > `kafka-topics.sh --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1 --create --topic test1`
 
-4. In two separate terminals, launch Kafka consumer :
-> `python3 kafka/consumer.py`
+4. Start Spark Structured Streaming app: 
+> `cd 'spark struct str'/`
+> `python main.py`
 
-5. and launch Kafka producer :
-> `python3 kafka/producer.py`
+5. Start kafka app:
+> `cd kafka/`
+> `python producer.py`
 
 ## Docs
-In the doc/ folder, an XML explains the possible architecture for the app, from getting data to ML predictions.
+In the doc/ folder, an XML explains the architecture of the app, from getting data to ML predictions and data researching.<br>
+In the doc/notebooks, [Jupyter notebooks](https://jupyter.org) will explain certain of our researchs.
