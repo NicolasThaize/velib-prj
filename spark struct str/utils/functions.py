@@ -2,7 +2,7 @@ from pyspark.sql.functions import col, from_json, avg, window
 
 
 def basicAverage(df): # Every hour, produce a day windowed df with average elec and mechanical bikes and anverage number of docks available by station 
-  return df.groupby(window(col('timestamp'), "1 days", "1 hours"), col('stationcode')) \
+  return df.groupby(window(col('timestamp'), "1 hour", "5 minutes"), col('stationcode')) \
   .agg(avg('mechanical').alias('avg_mechanical'), avg('ebike').alias('avg_ebike'),  avg('numdocksavailable').alias('avg_numdocksavailable'))
 
 def groupedAverage(df):

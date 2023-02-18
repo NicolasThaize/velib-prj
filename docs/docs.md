@@ -1,5 +1,8 @@
 # DOCS
 
+## Which window is used in spark structured streaming data processing ?
+We used a 1 hour window which updates every 5 minutes to provide a sufficent overview of Velib's usage in Paris area.
+
 ## How did we defined station clusters ?
 Firstly, we have taken station geographical positions on the following source: https://opendata.paris.fr/explore/dataset/velib-emplacement-des-stations/export/
 
