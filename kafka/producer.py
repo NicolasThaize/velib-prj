@@ -4,7 +4,8 @@ from time import sleep
 from json import dumps, load
 
 from utils.envs import KAFKA_TIMESTAMP_FORMAT
-from utils.functions import date1_greater_date2, convert_due_date_to_timestamp, parse_string_date
+from utils.functions import date1_greater_date2, convert_due_date_to_timestamp, parse_string_date, \
+    is_due_date_valid
 
 producer = KafkaProducer(bootstrap_servers='localhost:9092', value_serializer=lambda x: dumps(x).encode('utf-8'))
 
@@ -20,11 +21,15 @@ def get_velib_data_offline():
     with open('/Users/nicolas/Documents/Cours/M1/Big data/Projet velib/velib-prj/kafka/raw_data.json') as json_string:
         return load(json_string)
 
+def filter_outdated_data(df):
+    return df.filter()
+
 def store_to_kafka(offline=False): # main
     while True:
         velibs_data = get_velib_data_offline() if offline else get_velib_data(nrows=9999) # Get velib's raw data
         print("No of velibs stations: ", len(velibs_data['records']))
-        for station_data in velibs_data['records']: # For each velib station
+        velibs_data_filtered = list(filter(is_due_date_valid, velibs_data['records']))
+        for station_data in velibs_data_filtered: # For each velib station
             station_data['fields']['duedate'] = convert_due_date_to_timestamp(station_data['fields']['duedate']) # Formatting date format to allow spark timestamp usage
             station_data['fields']['timestamp'] = station_data['fields'].pop('duedate') # Renaming 'duedate' column to 'timestamp'
             print(station_data)
