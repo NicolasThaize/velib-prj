@@ -4,3 +4,4 @@ checkpoints/
 tmp/
 cp/
 consumed_csv/
+last_timestamp.json

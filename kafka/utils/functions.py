@@ -1,7 +1,10 @@
 from dateutil import parser
 from datetime import date, timedelta
-from utils.envs import KAFKA_TIMESTAMP_FORMAT
+from utils.envs import KAFKA_TIMESTAMP_FORMAT, LAST_TIMESTAMP_FILE_PATH, VELIB_REST_API_URL, VELIB_SINGLE_STATION_REST_API_URL
 from datetime import datetime
+from json import dumps, load
+from os import path
+import requests
 
 def get_today_date():
     return date.today()
@@ -28,3 +31,26 @@ def convert_due_date_to_timestamp(date): # Convert a string date to a specific f
 
 def convert_string_to_date(date_string):
     return parser.parse(date_string)
+
+def write_last_timestamp(dict):
+    with open(LAST_TIMESTAMP_FILE_PATH, 'w') as convert_file:
+        convert_file.write(dumps(dict))
+
+def last_timestamp_dict_from_file():
+    with open(LAST_TIMESTAMP_FILE_PATH) as json_file:
+        return load(json_file)
+
+def get_velib_data(nrows=10, single_station=False): # HTTP GET on api endpoint according to number of rows requested
+    url = VELIB_REST_API_URL.format(nrows) if not single_station else VELIB_SINGLE_STATION_REST_API_URL
+    r = requests.get(url)
+    return r.json() # return the json content of the response
+
+def get_velib_data_offline():
+    with open('./kafka/raw_data.json') as json_string:
+        return load(json_string)
+
+def get_last_timestamp_dict():
+    if path.isfile(LAST_TIMESTAMP_FILE_PATH): # If timestamp file exists
+            return last_timestamp_dict_from_file() # Return last timestamp dict that was stored in the file
+    else:
+        return {} # Return empty dit
