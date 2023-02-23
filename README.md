@@ -19,7 +19,11 @@ Or
 
 3. Start kafka app:
 > `cd kafka/`
-> `python producer.py`
+> `python consumer.py` 
+
+and
+
+> `python producer.py` 
 
 ## Procedure standalone
 1. In two separate terminals, launch Zookeeper :
