@@ -1,4 +1,4 @@
-version: '3'
+version: '4'
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:7.3.0
@@ -40,3 +40,12 @@ services:
       echo -e 'Successfully created the following topics:'
       kafka-topics --bootstrap-server broker:29092 --list
       "
+
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: myPwd
+    ports:
+      - "27017:27017"

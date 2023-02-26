@@ -1,6 +1,6 @@
 from pyspark.sql.types import StructType, StructField, IntegerType, FloatType, ArrayType, StringType, TimestampType
 
-MONGO_DB_CONNECTION_STRING = "mongodb://localhost:27017/"
+MONGO_DB_CONNECTION_STRING = "mongodb://root:myPwd@localhost:27017/?authMechanism=DEFAULT"
 MONGO_DB_NAME = "velibprj"
 
 station_cluster_scheme = StructType([ \
