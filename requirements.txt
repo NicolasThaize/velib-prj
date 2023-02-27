@@ -1,4 +1,6 @@
 pyspark
-kafka
+kafka-python
 time
 json
+pymongo
+python-dateutil
