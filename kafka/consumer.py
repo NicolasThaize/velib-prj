@@ -18,7 +18,9 @@ for msg in consumer:
 
     #test if file exists
     file_exist = os.path.isfile(csv_file_path)
-
+    if not os.path.exists(CSV_FOLDER_PATH):
+        os.makedirs(CSV_FOLDER_PATH)
+    
     with open(csv_file_path, mode='a', newline='\n', encoding='UTF8') as csvfile:
         writer = csv.writer(csvfile, delimiter=";")
         
