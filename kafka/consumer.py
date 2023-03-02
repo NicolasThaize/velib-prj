@@ -7,7 +7,7 @@ import json
 
 CSV_FOLDER_PATH = "../consumed_csv/"
 
-consumer = KafkaConsumer('test1', bootstrap_servers='localhost:9092')
+consumer = KafkaConsumer('stations_raw_data', bootstrap_servers='localhost:9092')
 
 for msg in consumer:
     station_dict = json.loads(msg.value.decode('utf-8'))

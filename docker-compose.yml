@@ -34,7 +34,7 @@ services:
       kafka-topics --bootstrap-server broker:29092 --list
 
       echo -e 'Creating kafka topic 1'
-      kafka-topics --bootstrap-server broker:29092 --partitions 1 --replication-factor 1 --create --topic test1
+      kafka-topics --bootstrap-server broker:29092 --partitions 1 --replication-factor 1 --create --topic stations_raw_data
       
 
       echo -e 'Successfully created the following topics:'

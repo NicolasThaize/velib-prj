@@ -14,7 +14,7 @@ raw_df = spark \
   .readStream \
   .format("kafka") \
   .option("kafka.bootstrap.servers", "localhost:9092") \
-  .option("subscribe", "test1") \
+  .option("subscribe", "stations_raw_data") \
   .load() # Subscribing to kafka topic
 
 string_casted_df = raw_df.selectExpr("CAST(value AS STRING)") # Casting binary values to string
